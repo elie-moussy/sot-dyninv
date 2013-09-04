@@ -26,7 +26,7 @@ int main (void)
   const unsigned int n=36, m=24, p=12;
   MatrixXd Xhi = MatrixXd::Random(n,p);
   MatrixXd R = MatrixXd::Random(p,m);
-  MatrixXd M = Xhi*R;
+  MatrixXd M; M = Xhi*R;
 
 
 
