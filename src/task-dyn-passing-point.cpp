@@ -46,16 +46,15 @@ namespace dynamicgraph
       TaskDynPassingPoint( const std::string & name )
 	: TaskDynPD(name)
 
-	,CONSTRUCT_SIGNAL_IN(velocityDes, ml::Vector)
+	,CONSTRUCT_SIGNAL_IN(velocityDes, dynamicgraph::Vector)
 	,CONSTRUCT_SIGNAL_IN(duration, double)
 	,CONSTRUCT_SIGNAL_IN(initialTime, double)
 
-	,CONSTRUCT_SIGNAL_OUT(velocityCurrent, ml::Vector,
+	,CONSTRUCT_SIGNAL_OUT(velocityCurrent, dynamicgraph::Vector,
 			      qdotSIN<<jacobianSOUT )
-	,CONSTRUCT_SIGNAL_OUT(velocityDesired, ml::Vector,
+	,CONSTRUCT_SIGNAL_OUT(velocityDesired, dynamicgraph::Vector,
 			      velocityDesSIN<<controlSelectionSIN )
-
-	,previousTask()
+	,previousTask((int)0)
       {
 	taskSOUT.setFunction( boost::bind(&TaskDynPassingPoint::computeTaskSOUT,this,_1,_2) );
 	taskSOUT.addDependency( velocityCurrentSOUT );
@@ -73,15 +72,15 @@ namespace dynamicgraph
       /* ---------------------------------------------------------------------- */
 
       /* Current velocity using the Jacobian: dx_0 = J*dq */
-      ml::Vector& TaskDynPassingPoint::
-      velocityCurrentSOUT_function( ml::Vector& velocityCurrent, int time )
+      dynamicgraph::Vector& TaskDynPassingPoint::
+      velocityCurrentSOUT_function( dynamicgraph::Vector& velocityCurrent, int time )
       {
       	sotDEBUGIN(15);
 
-      	const ml::Vector & qdot = qdotSIN(time);
-      	const ml::Matrix & J    = jacobianSOUT(time);
-      	velocityCurrent.resize( J.nbRows() );
-      	J.multiply(qdot, velocityCurrent);
+      	const dynamicgraph::Vector & qdot = qdotSIN(time);
+      	const dynamicgraph::Matrix & J    = jacobianSOUT(time);
+      	velocityCurrent.resize( J.rows() );
+      	velocityCurrent = J*qdot;
 
       	sotDEBUGOUT(15);
       	return velocityCurrent;
@@ -89,12 +88,12 @@ namespace dynamicgraph
 
 
       /* Select the correct components of the desired velocity according to 'selec' */
-      ml::Vector& TaskDynPassingPoint::
-      velocityDesiredSOUT_function( ml::Vector& velocityDesired, int time )
+      dynamicgraph::Vector& TaskDynPassingPoint::
+      velocityDesiredSOUT_function( dynamicgraph::Vector& velocityDesired, int time )
       {
       	sotDEBUGIN(15);
 
-	const ml::Vector & velocityDesiredFull = velocityDesSIN(time);
+	const dynamicgraph::Vector & velocityDesiredFull = velocityDesSIN(time);
 	const Flags &fl = controlSelectionSIN(time);
 
 	unsigned int dim = 0;
@@ -119,9 +118,9 @@ namespace dynamicgraph
 	const double& fullDuration     = durationSIN(time);
 	const double& n0               = initialTimeSIN(time);
 	const double& dt               = dtSIN(time);
-	const ml::Vector & e           = errorSOUT(time);
-	const ml::Vector & vel_current = velocityCurrentSOUT(time);
-	const ml::Vector & vel_desired = velocityDesiredSOUT(time);
+	const dynamicgraph::Vector & e           = errorSOUT(time);
+	const dynamicgraph::Vector & vel_current = velocityCurrentSOUT(time);
+	const dynamicgraph::Vector & vel_desired = velocityDesiredSOUT(time);
 
 	double T = fabs( fullDuration-(time-n0)*dt );
 	//double T = fullDuration-(time-n0)*dt;

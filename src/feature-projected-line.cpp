@@ -59,9 +59,9 @@ namespace dynamicgraph
 
 	,CONSTRUCT_SIGNAL_IN(xa,MatrixHomogeneous)
 	,CONSTRUCT_SIGNAL_IN(xb,MatrixHomogeneous)
-	,CONSTRUCT_SIGNAL_IN(Ja,ml::Matrix)
-	,CONSTRUCT_SIGNAL_IN(Jb,ml::Matrix)
-	,CONSTRUCT_SIGNAL_IN(xc,ml::Vector)
+	,CONSTRUCT_SIGNAL_IN(Ja,dynamicgraph::Matrix)
+	,CONSTRUCT_SIGNAL_IN(Jb,dynamicgraph::Matrix)
+	,CONSTRUCT_SIGNAL_IN(xc,dynamicgraph::Vector)
       {
 	jacobianSOUT.addDependency( xaSIN );
 	jacobianSOUT.addDependency( xbSIN );
@@ -90,21 +90,21 @@ namespace dynamicgraph
       /** Compute the interaction matrix from a subset of
        * the possible features.
        */
-      ml::Matrix& FeatureProjectedLine::
-      computeJacobian( ml::Matrix& J,int time )
+      dynamicgraph::Matrix& FeatureProjectedLine::
+      computeJacobian( dynamicgraph::Matrix& J,int time )
       {
 	sotDEBUGIN(15);
 
 	const MatrixHomogeneous & A = xaSIN(time), & B = xbSIN(time);
-	const ml::Vector & C = xcSIN(time);
+	const dynamicgraph::Vector & C = xcSIN(time);
 	const double
 	  xa=A(0,3),xb=B(0,3),xc=C(0),
 	  ya=A(1,3),yb=B(1,3),yc=C(1);
 
-	const ml::Matrix & JA = JaSIN(time), & JB = JbSIN(time);
+	const dynamicgraph::Matrix & JA = JaSIN(time), & JB = JbSIN(time);
 
-	const int nq=JA.nbCols();
-	assert((int)JB.nbCols()==nq);
+	const int nq=JA.cols();
+	assert((int)JB.cols()==nq);
 	J.resize(1,nq);
 	for( int i=0;i<nq;++i )
 	  {
@@ -121,13 +121,13 @@ namespace dynamicgraph
       /** Compute the error between two visual features from a subset
        * a the possible features.
        */
-      ml::Vector&
-      FeatureProjectedLine::computeError( ml::Vector& error,int time )
+      dynamicgraph::Vector&
+      FeatureProjectedLine::computeError( dynamicgraph::Vector& error,int time )
       {
 	sotDEBUGIN(15);
 
 	const MatrixHomogeneous & A = xaSIN(time),& B = xbSIN(time);
-	const ml::Vector & C = xcSIN(time);
+	const dynamicgraph::Vector & C = xcSIN(time);
 	const double
 	  xa=A(0,3),xb=B(0,3),xc=C(0),
 	  ya=A(1,3),yb=B(1,3),yc=C(1);

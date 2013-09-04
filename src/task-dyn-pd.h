@@ -67,20 +67,20 @@ namespace dynamicgraph {
 	public:  /* --- SIGNALS --- */
 
 	  DECLARE_SIGNAL_IN(Kv,double);
-	  DECLARE_SIGNAL_IN(qdot,ml::Vector);
+	  DECLARE_SIGNAL_IN(qdot,dynamicgraph::Vector);
 	  DECLARE_SIGNAL_IN(dt,double);
 
-	  DECLARE_SIGNAL_OUT(errorDot,ml::Vector);
+	  DECLARE_SIGNAL_OUT(errorDot,dynamicgraph::Vector);
 	  DECLARE_SIGNAL_OUT(KvAuto,double);
-	  DECLARE_SIGNAL_OUT(Jdot,ml::Matrix);
-	  DECLARE_SIGNAL_OUT(taskVector,ml::Vector);
+	  DECLARE_SIGNAL_OUT(Jdot,dynamicgraph::Matrix);
+	  DECLARE_SIGNAL_OUT(taskVector,dynamicgraph::Vector);
 
 	protected:
 	  dynamicgraph::sot::VectorMultiBound&
 	    taskSOUT_function( dynamicgraph::sot::VectorMultiBound& task,int iter );
 
 	protected:
-	  ml::Matrix previousJ;
+	  dynamicgraph::Matrix previousJ;
 	  bool previousJset;
 
 	public: /* COMMANDS */

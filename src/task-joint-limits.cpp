@@ -51,14 +51,14 @@ namespace dynamicgraph
       TaskJointLimits( const std::string & name )
 	: TaskAbstract(name)
 
-	,CONSTRUCT_SIGNAL_IN(position,ml::Vector)
-	,CONSTRUCT_SIGNAL_IN(referenceInf,ml::Vector)
-	,CONSTRUCT_SIGNAL_IN(referenceSup,ml::Vector)
+	,CONSTRUCT_SIGNAL_IN(position,dynamicgraph::Vector)
+	,CONSTRUCT_SIGNAL_IN(referenceInf,dynamicgraph::Vector)
+	,CONSTRUCT_SIGNAL_IN(referenceSup,dynamicgraph::Vector)
 	,CONSTRUCT_SIGNAL_IN(dt,double)
 	,CONSTRUCT_SIGNAL_IN(controlGain,double)
 	,CONSTRUCT_SIGNAL_IN(selec,Flags)
 
-	,CONSTRUCT_SIGNAL_OUT(normalizedPosition,ml::Vector,
+	,CONSTRUCT_SIGNAL_OUT(normalizedPosition,dynamicgraph::Vector,
 			      positionSIN<<referenceInfSIN<<referenceSupSIN)
 	,CONSTRUCT_SIGNAL_OUT(activeSize,int,
 			      positionSIN<<selecSIN)
@@ -97,9 +97,9 @@ namespace dynamicgraph
       dg::sot::VectorMultiBound& TaskJointLimits::
       computeTask( dg::sot::VectorMultiBound& res,int time )
       {
-	const ml::Vector & position = positionSIN(time);
-	const ml::Vector & refInf = referenceInfSIN(time);
-	const ml::Vector & refSup = referenceSupSIN(time);
+	const dynamicgraph::Vector & position = positionSIN(time);
+	const dynamicgraph::Vector & refInf = referenceInfSIN(time);
+	const dynamicgraph::Vector & refSup = referenceSupSIN(time);
 	const Flags & selec = selecSIN(time);
 	const double K = 1.0/(dtSIN(time)*controlGainSIN(time));
 	const int size = position.size(), activeSize=activeSizeSOUT(time);
@@ -117,8 +117,8 @@ namespace dynamicgraph
 	return res;
       }
 
-      ml::Matrix& TaskJointLimits::
-      computeJacobian( ml::Matrix& J,int time )
+      dynamicgraph::Matrix& TaskJointLimits::
+      computeJacobian( dynamicgraph::Matrix& J,int time )
       {
 	const Flags & selec = selecSIN(time);
 	const int size = positionSIN(time).size(), activeSize=activeSizeSOUT(time);
@@ -133,12 +133,12 @@ namespace dynamicgraph
 	return J;
       }
 
-      ml::Vector& TaskJointLimits::
-      normalizedPositionSOUT_function( ml::Vector& res, int time )
+      dynamicgraph::Vector& TaskJointLimits::
+      normalizedPositionSOUT_function( dynamicgraph::Vector& res, int time )
       {
-	const ml::Vector & position = positionSIN(time);
-	const ml::Vector & refInf = referenceInfSIN(time);
-	const ml::Vector & refSup = referenceSupSIN(time);
+	const dynamicgraph::Vector & position = positionSIN(time);
+	const dynamicgraph::Vector & refInf = referenceInfSIN(time);
+	const dynamicgraph::Vector & refSup = referenceSupSIN(time);
 	const Flags & selec = selecSIN(time);
 	const int size = position.size(), activeSize=activeSizeSOUT(time);
 	assert( size==(int)refInf.size() && size==(int)refSup.size() );

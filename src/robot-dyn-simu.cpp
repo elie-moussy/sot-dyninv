@@ -42,8 +42,8 @@ namespace dynamicgraph
       RobotDynSimu( const std::string & name )
 	: Device(name)
 
-	,CONSTRUCT_SIGNAL_IN(acceleration,ml::Vector)
-	,CONSTRUCT_SIGNAL_OUT(velocity,ml::Vector,sotNOSIGNAL)
+	,CONSTRUCT_SIGNAL_IN(acceleration,dg::Vector)
+	,CONSTRUCT_SIGNAL_OUT(velocity,dg::Vector,sotNOSIGNAL)
 
       {
 	Entity::signalRegistration( accelerationSIN << velocitySOUT );
@@ -72,8 +72,8 @@ namespace dynamicgraph
 	os << "RobotDynSimu, nothing more to say yet." << std::endl;
       }
 
-      ml::Vector& RobotDynSimu::
-      velocitySOUT_function( ml::Vector& v, int )
+      dg::Vector& RobotDynSimu::
+      velocitySOUT_function( dg::Vector& v, int )
       {
 	if( velocity_.size()!=state_.size() )
 	  {
@@ -88,7 +88,7 @@ namespace dynamicgraph
       void RobotDynSimu::
       integrate( const double & dt )
       {
-	const ml::Vector & acceleration = accelerationSIN( controlSIN.getTime() );
+	const dg::Vector & acceleration = accelerationSIN( controlSIN.getTime() );
 
 	if( velocity_.size()!=state_.size() )
 	  {
@@ -101,14 +101,14 @@ namespace dynamicgraph
 	velocity_ += acceleration*dt;
 
 	integrateRollPitchYaw(state_, velocity_, dt);
-	for( unsigned int i=6;i<state_.size();++i )
+	for( int i=6;i<state_.size();++i )
 	  { state_(i) += velocity_(i)*dt; }
 
 	velocitySOUT.setReady();
       }
 
       void RobotDynSimu::
-      setVelocity( const ml::Vector& v )
+      setVelocity( const dg::Vector& v )
       {
 	velocity_ = v;
 	velocitySOUT.setReady();

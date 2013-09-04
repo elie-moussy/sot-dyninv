@@ -44,11 +44,11 @@ namespace dynamicgraph
       PseudoRobotDynamic( const std::string & name )
 	: DynamicIntegrator(name)
 
-	,CONSTRUCT_SIGNAL_IN(control,ml::Vector)
-	,CONSTRUCT_SIGNAL_OUT(qdot,ml::Vector,controlSIN)
+	,CONSTRUCT_SIGNAL_IN(control,dg::Vector)
+	,CONSTRUCT_SIGNAL_OUT(qdot,dg::Vector,controlSIN)
 
-	,CONSTRUCT_SIGNAL(rotation,OUT,ml::Vector)
-	,CONSTRUCT_SIGNAL(translation,OUT,ml::Vector)
+	,CONSTRUCT_SIGNAL(rotation,OUT,dg::Vector)
+	,CONSTRUCT_SIGNAL(translation,OUT,dg::Vector)
 	,stateSOUT( &positionSOUT,getClassName()+"("+getName()+")::output(vector)::state" )
 
 	,formerOpenHRP( NULL )
@@ -88,8 +88,8 @@ namespace dynamicgraph
        * along with the 6D position of the free floating through signals
        * rotationSOUT and translationSOUT.
        */
-      ml::Vector& PseudoRobotDynamic::
-      qdotSOUT_function( ml::Vector& mlqdot, int time )
+      dg::Vector& PseudoRobotDynamic::
+      qdotSOUT_function( dg::Vector& mlqdot, int time )
       {
 	sotDEBUGIN(5);
 
@@ -102,7 +102,7 @@ namespace dynamicgraph
 
 	EIGEN_VECTOR_FROM_SIGNAL(p,position );
 	{
-	  ml::Vector mlv3;
+	  dg::Vector mlv3;
 	  EIGEN_VECTOR_FROM_VECTOR( r,mlv3,3 );
 	  r = p.segment(3,3);
 	  rotationSOUT = mlv3;
@@ -219,25 +219,25 @@ namespace dynamicgraph
 	      }
 	    catch (...) {}
 
-	    const ml::Vector& pos
-	      = dynamic_cast< dg::Signal<ml::Vector,int>& >
+	    const dg::Vector& pos
+	      = dynamic_cast< dg::Signal<dg::Vector,int>& >
 	      ( formerOpenHRP->getSignal("state") ).accessCopy();
 	    try
 	      {
-		const ml::Vector& vel
-		  = dynamic_cast< dg::Signal<ml::Vector,int>& >
+		const dg::Vector& vel
+		  = dynamic_cast< dg::Signal<dg::Vector,int>& >
 		  ( formerOpenHRP->getSignal("velocity") ).accessCopy();
 		setState(pos,vel);
 	      }
 	    catch (... )
 	      {
-		ml::Vector velzero( pos.size() ); velzero.setZero();
+		dg::Vector velzero( pos.size() ); velzero.setZero();
 		setState(pos,velzero);
 	      }
 	  }
       }
       void PseudoRobotDynamic::
-      setRoot( const ml::Matrix & mlM )
+      setRoot( const dg::Matrix & mlM )
       {
 	sotDEBUG(15) << "Set root with " << mlM << std::endl;
 	using namespace Eigen;
@@ -338,9 +338,9 @@ namespace dynamicgraph
 	  {
 	    if( cmdArgs >> std::ws, cmdArgs.good() )
 	      {
-		ml::Matrix M; cmdArgs >> M; setRoot(M);
+		dg::Matrix M; cmdArgs >> M; setRoot(M);
 		std::ostringstream osback;
-		osback << M.accessToMotherLib(); cmdArgs.str(osback.str());
+		osback << M; cmdArgs.str(osback.str());
 		formerOpenHRP ->commandLine( cmdLine,cmdArgs,os );
 	      }
 	    else

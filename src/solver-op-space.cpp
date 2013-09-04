@@ -64,19 +64,19 @@ namespace dynamicgraph
 	: Entity(name)
 	,stack_t()
 
-	,CONSTRUCT_SIGNAL_IN(matrixInertia,ml::Matrix)
-	,CONSTRUCT_SIGNAL_IN(velocity,ml::Vector)
-	,CONSTRUCT_SIGNAL_IN(dyndrift,ml::Vector)
+	,CONSTRUCT_SIGNAL_IN(matrixInertia,dynamicgraph::Matrix)
+	,CONSTRUCT_SIGNAL_IN(velocity,dynamicgraph::Vector)
+	,CONSTRUCT_SIGNAL_IN(dyndrift,dynamicgraph::Vector)
 	,CONSTRUCT_SIGNAL_IN(damping,double)
 	,CONSTRUCT_SIGNAL_IN(breakFactor,double)
-	,CONSTRUCT_SIGNAL_IN(posture,ml::Vector)
-	,CONSTRUCT_SIGNAL_IN(position,ml::Vector)
+	,CONSTRUCT_SIGNAL_IN(posture,dynamicgraph::Vector)
+	,CONSTRUCT_SIGNAL_IN(position,dynamicgraph::Vector)
 
-	,CONSTRUCT_SIGNAL_OUT(control,ml::Vector,
+	,CONSTRUCT_SIGNAL_OUT(control,dynamicgraph::Vector,
 			      matrixInertiaSIN << dyndriftSIN
 			      << velocitySIN )
-	,CONSTRUCT_SIGNAL(zmp,OUT,ml::Vector)
-	,CONSTRUCT_SIGNAL(acceleration,OUT,ml::Vector)
+	,CONSTRUCT_SIGNAL(zmp,OUT,dynamicgraph::Vector)
+	,CONSTRUCT_SIGNAL(acceleration,OUT,dynamicgraph::Vector)
 
 	,nbParam(0), nq(0),ntau(0),nfs(0)
 	,hsolver()
@@ -96,10 +96,10 @@ namespace dynamicgraph
 	boost::function<void(SolverOpSpace*,const std::string&)> f_addContact
 	  =
 	  boost::bind( &SolverOpSpace::addContact,_1,_2,
-		       (dynamicgraph::Signal<ml::Matrix, int>*)NULL,
-		       (dynamicgraph::Signal<ml::Matrix, int>*)NULL,
-		       (dynamicgraph::Signal<ml::Vector, int>*)NULL,
-		       (dynamicgraph::Signal<ml::Matrix, int>*)NULL);
+		       (dynamicgraph::Signal<dynamicgraph::Matrix, int>*)NULL,
+		       (dynamicgraph::Signal<dynamicgraph::Matrix, int>*)NULL,
+		       (dynamicgraph::Signal<dynamicgraph::Vector, int>*)NULL,
+		       (dynamicgraph::Signal<dynamicgraph::Matrix, int>*)NULL);
 	addCommand("add.Contact",
 		   makeCommandVoid1(*this,f_addContact,
 				    docCommandVoid1("create the contact signals, unpluged.",
@@ -188,10 +188,10 @@ namespace dynamicgraph
 
       void SolverOpSpace::
       addContact( const std::string & name,
-		  Signal<ml::Matrix,int> * jacobianSignal,
-		  Signal<ml::Matrix,int> * JdotSignal,
-		  Signal<ml::Vector,int> * corrSignal,
-		  Signal<ml::Matrix,int> * contactPointsSignal )
+		  Signal<dynamicgraph::Matrix,int> * jacobianSignal,
+		  Signal<dynamicgraph::Matrix,int> * JdotSignal,
+		  Signal<dynamicgraph::Vector,int> * corrSignal,
+		  Signal<dynamicgraph::Matrix,int> * contactPointsSignal )
       {
 	if( contactMap.find(name) != contactMap.end())
 	  {
@@ -200,36 +200,36 @@ namespace dynamicgraph
 	  }
 
 	contactMap[name].jacobianSIN
-	  = matrixSINPtr( new SignalPtr<ml::Matrix,int>
+	  = matrixSINPtr( new SignalPtr<dynamicgraph::Matrix,int>
 			  ( jacobianSignal,
 			    "sotDynInvWB("+getName()+")::input(matrix)::_"+name+"_J" ) );
 	signalRegistration( *contactMap[name].jacobianSIN );
 
 	contactMap[name].JdotSIN
-	  = matrixSINPtr( new SignalPtr<ml::Matrix,int>
+	  = matrixSINPtr( new SignalPtr<dynamicgraph::Matrix,int>
 			  ( JdotSignal,
 			    "sotDynInvWB("+getName()+")::input(matrix)::_"+name+"_Jdot" ) );
 	signalRegistration( *contactMap[name].JdotSIN );
 
 	contactMap[name].supportSIN
-	  = matrixSINPtr( new SignalPtr<ml::Matrix,int>
+	  = matrixSINPtr( new SignalPtr<dynamicgraph::Matrix,int>
 			  ( contactPointsSignal,
 			    "sotDynInvWB("+getName()+")::input(matrix)::_"+name+"_p" ) );
 	signalRegistration( *contactMap[name].supportSIN );
 
 	contactMap[name].correctorSIN
-	  = vectorSINPtr( new SignalPtr<ml::Vector,int>
+	  = vectorSINPtr( new SignalPtr<dynamicgraph::Vector,int>
 			  ( corrSignal,
 			    "sotDynInvWB("+getName()+")::input(vector)::_"+name+"_x" ) );
 	signalRegistration( *contactMap[name].correctorSIN );
 
 	contactMap[name].forceSOUT
-	  = vectorSOUTPtr( new Signal<ml::Vector,int>
+	  = vectorSOUTPtr( new Signal<dynamicgraph::Vector,int>
 			   ( "sotDynInvWB("+getName()+")::output(vector)::_"+name+"_f" ) );
 	signalRegistration( *contactMap[name].forceSOUT );
 
 	contactMap[name].fnSOUT
-	  = vectorSOUTPtr( new Signal<ml::Vector,int>
+	  = vectorSOUTPtr( new Signal<dynamicgraph::Vector,int>
 			   ( "sotDynInvWB("+getName()+")::output(vector)::_"+name+"_fn" ) );
 	signalRegistration( *contactMap[name].fnSOUT );
 
@@ -369,7 +369,7 @@ namespace dynamicgraph
 	BOOST_FOREACH(contacts_t::value_type& pContact, contactMap)
 	  {
 	    Contact & contact = pContact.second;
-	    const int nbi = contact.supportSIN->accessCopy().nbCols();
+	    const int nbi = contact.supportSIN->accessCopy().cols();
 	    nbContactPoints += nbi;
 	    int sizeVar = 6+nbi;
 	    contact.range = std::make_pair( range,range+sizeVar );
@@ -438,8 +438,8 @@ namespace dynamicgraph
       /* --- SIGNALS ---------------------------------------------------------- */
       /* --- SIGNALS ---------------------------------------------------------- */
 
-      ml::Vector& SolverOpSpace::
-      controlSOUT_function( ml::Vector &control, int t )
+      dynamicgraph::Vector& SolverOpSpace::
+      controlSOUT_function( dynamicgraph::Vector &control, int t )
       {
 	sotDEBUG(15) << " # In time = " << t << std::endl;
 
@@ -687,14 +687,14 @@ namespace dynamicgraph
 	BOOST_FOREACH(contacts_t::value_type& pContact, contactMap)
 	  {
 	    Contact& contact = pContact.second;
-	    const int nbP = (*contact.supportSIN)(t).nbCols();
+	    const int nbP = (*contact.supportSIN)(t).cols();
 	    const int ri = contact.range.first;
 	    /* range is an object of the struct Contact containing 2 integers:
 	       first: the position of the 1st contact in the parameters vector
 	       second: the position of the 2nd contact in the parameters vector */
-	    ml::Vector mlf6;
+	    dynamicgraph::Vector mlf6;
 	    EIGEN_VECTOR_FROM_VECTOR(f6,mlf6,6 );
-	    ml::Vector mlfn;
+	    dynamicgraph::Vector mlfn;
 	    EIGEN_VECTOR_FROM_VECTOR(fn,mlfn,nbP);
 
 	    f6 = solution.transpose().COLS_F.COLS(ri,ri+6);
@@ -708,7 +708,7 @@ namespace dynamicgraph
 
 	/* ACC signal */
 	{
-	  ml::Vector mlacc;
+	  dynamicgraph::Vector mlacc;
 	  EIGEN_VECTOR_FROM_VECTOR( acc,mlacc,nbDofs+6 );
 	  acc = solution.transpose().COLS_Q;
 	  accelerationSOUT = mlacc;

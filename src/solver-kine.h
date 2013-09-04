@@ -86,8 +86,8 @@ namespace dynamicgraph {
 	public:  /* --- SIGNALS --- */
 
 	  DECLARE_SIGNAL_IN(damping,double);
-	  DECLARE_SIGNAL_IN(velocity,ml::Vector); //only used for second order kinematics
-	  DECLARE_SIGNAL_OUT(control,ml::Vector);
+	  DECLARE_SIGNAL_IN(velocity,dynamicgraph::Vector); //only used for second order kinematics
+	  DECLARE_SIGNAL_OUT(control,dynamicgraph::Vector);
 
 	public: /* --- COMMANDS --- */
 	  void debugOnce( void );

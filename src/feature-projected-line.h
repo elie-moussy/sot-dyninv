@@ -68,9 +68,9 @@ namespace dynamicgraph {
 
 	DECLARE_SIGNAL_IN(xa,MatrixHomogeneous);
 	DECLARE_SIGNAL_IN(xb,MatrixHomogeneous);
-	DECLARE_SIGNAL_IN(Ja,ml::Matrix);
-	DECLARE_SIGNAL_IN(Jb,ml::Matrix);
-	DECLARE_SIGNAL_IN(xc,ml::Vector);
+	DECLARE_SIGNAL_IN(Ja,dynamicgraph::Matrix);
+	DECLARE_SIGNAL_IN(Jb,dynamicgraph::Matrix);
+	DECLARE_SIGNAL_IN(xc,dynamicgraph::Vector);
 
 	DECLARE_NO_REFERENCE;
 
@@ -79,8 +79,8 @@ namespace dynamicgraph {
 	virtual ~FeatureProjectedLine( void ) {}
 
 	virtual unsigned int& getDimension( unsigned int & dim, int time );
-	virtual ml::Vector& computeError( ml::Vector& res,int time );
-	virtual ml::Matrix& computeJacobian( ml::Matrix& res,int time );
+	virtual dynamicgraph::Vector& computeError( dynamicgraph::Vector& res,int time );
+	virtual dynamicgraph::Matrix& computeJacobian( dynamicgraph::Matrix& res,int time );
 
 	virtual void display( std::ostream& os ) const;
 

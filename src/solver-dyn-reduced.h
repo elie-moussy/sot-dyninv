@@ -84,52 +84,52 @@ namespace dynamicgraph {
 
 	public:  /* --- SIGNALS --- */
 
-	  DECLARE_SIGNAL_IN(matrixInertia,ml::Matrix);
-	  DECLARE_SIGNAL_IN(inertiaSqroot,ml::Matrix);
-	  DECLARE_SIGNAL_IN(inertiaSqrootInv,ml::Matrix);
-	  DECLARE_SIGNAL_IN(velocity,ml::Vector);
-	  DECLARE_SIGNAL_IN(dyndrift,ml::Vector);
+	  DECLARE_SIGNAL_IN(matrixInertia,dynamicgraph::Matrix);
+	  DECLARE_SIGNAL_IN(inertiaSqroot,dynamicgraph::Matrix);
+	  DECLARE_SIGNAL_IN(inertiaSqrootInv,dynamicgraph::Matrix);
+	  DECLARE_SIGNAL_IN(velocity,dynamicgraph::Vector);
+	  DECLARE_SIGNAL_IN(dyndrift,dynamicgraph::Vector);
 	  DECLARE_SIGNAL_IN(damping,double);
 	  DECLARE_SIGNAL_IN(breakFactor,double);
-	  DECLARE_SIGNAL_IN(posture,ml::Vector);
-	  DECLARE_SIGNAL_IN(position,ml::Vector);
+	  DECLARE_SIGNAL_IN(posture,dynamicgraph::Vector);
+	  DECLARE_SIGNAL_IN(position,dynamicgraph::Vector);
 
 	  DECLARE_SIGNAL_OUT(precompute,int);
 
-	  DECLARE_SIGNAL_OUT(inertiaSqrootOut,ml::Matrix);
-	  DECLARE_SIGNAL_OUT(inertiaSqrootInvOut,ml::Matrix);
+	  DECLARE_SIGNAL_OUT(inertiaSqrootOut,dynamicgraph::Matrix);
+	  DECLARE_SIGNAL_OUT(inertiaSqrootInvOut,dynamicgraph::Matrix);
 
 	  DECLARE_SIGNAL_OUT(sizeForcePoint,int);
 	  DECLARE_SIGNAL_OUT(sizeForceSpatial,int);
 	  DECLARE_SIGNAL_OUT(sizeConfiguration,int);
 
-	  DECLARE_SIGNAL_OUT(Jc,ml::Matrix);
-	  DECLARE_SIGNAL_OUT(forceGenerator,ml::Matrix);
-	  DECLARE_SIGNAL_OUT(freeMotionBase,ml::Matrix);
-	  DECLARE_SIGNAL_OUT(freeForceBase,ml::Matrix);
-	  DECLARE_SIGNAL_OUT(driftContact,ml::Vector);
+	  DECLARE_SIGNAL_OUT(Jc,dynamicgraph::Matrix);
+	  DECLARE_SIGNAL_OUT(forceGenerator,dynamicgraph::Matrix);
+	  DECLARE_SIGNAL_OUT(freeMotionBase,dynamicgraph::Matrix);
+	  DECLARE_SIGNAL_OUT(freeForceBase,dynamicgraph::Matrix);
+	  DECLARE_SIGNAL_OUT(driftContact,dynamicgraph::Vector);
 	  DECLARE_SIGNAL_OUT(sizeMotion,int);
 	  DECLARE_SIGNAL_OUT(sizeActuation,int);
 
-	  DECLARE_SIGNAL_OUT(solution,ml::Vector);
-	  DECLARE_SIGNAL_OUT(reducedControl,ml::Vector);
-	  DECLARE_SIGNAL_OUT(reducedForce,ml::Vector);
-	  DECLARE_SIGNAL_OUT(acceleration,ml::Vector);
-	  DECLARE_SIGNAL_OUT(forces,ml::Vector);
-	  DECLARE_SIGNAL_OUT(torque,ml::Vector);
+	  DECLARE_SIGNAL_OUT(solution,dynamicgraph::Vector);
+	  DECLARE_SIGNAL_OUT(reducedControl,dynamicgraph::Vector);
+	  DECLARE_SIGNAL_OUT(reducedForce,dynamicgraph::Vector);
+	  DECLARE_SIGNAL_OUT(acceleration,dynamicgraph::Vector);
+	  DECLARE_SIGNAL_OUT(forces,dynamicgraph::Vector);
+	  DECLARE_SIGNAL_OUT(torque,dynamicgraph::Vector);
 
-	  DECLARE_SIGNAL_OUT(forcesNormal,ml::Vector);
-	  DECLARE_SIGNAL_OUT(activeForces,ml::Vector);
+	  DECLARE_SIGNAL_OUT(forcesNormal,dynamicgraph::Vector);
+	  DECLARE_SIGNAL_OUT(activeForces,dynamicgraph::Vector);
 
 
 	  /* Temporary time-dependant shared variables. */
-	  DECLARE_SIGNAL(Jcdot,OUT,ml::Matrix);
+	  DECLARE_SIGNAL(Jcdot,OUT,dynamicgraph::Matrix);
 
 	private:  /* --- CONTACT POINTS --- */
 
-	  typedef boost::shared_ptr<dynamicgraph::SignalPtr<ml::Matrix,int> > matrixSINPtr;
-	  typedef boost::shared_ptr<dynamicgraph::SignalPtr<ml::Vector,int> > vectorSINPtr;
-	  typedef boost::shared_ptr<dynamicgraph::Signal<ml::Vector,int> > vectorSOUTPtr;
+	  typedef boost::shared_ptr<dynamicgraph::SignalPtr<dynamicgraph::Matrix,int> > matrixSINPtr;
+	  typedef boost::shared_ptr<dynamicgraph::SignalPtr<dynamicgraph::Vector,int> > vectorSINPtr;
+	  typedef boost::shared_ptr<dynamicgraph::Signal<dynamicgraph::Vector,int> > vectorSOUTPtr;
 	  struct Contact
 	  {
 	    matrixSINPtr jacobianSIN;
@@ -145,10 +145,10 @@ namespace dynamicgraph {
 
 	public:
 	  void addContact( const std::string & name,
-			   dynamicgraph::Signal<ml::Matrix,int> * jacobianSignal,
-			   dynamicgraph::Signal<ml::Matrix,int> * JdotSignal,
-			   dynamicgraph::Signal<ml::Vector,int> * corrSignal,
-			   dynamicgraph::Signal<ml::Matrix,int> * contactPointsSignal );
+			   dynamicgraph::Signal<dynamicgraph::Matrix,int> * jacobianSignal,
+			   dynamicgraph::Signal<dynamicgraph::Matrix,int> * JdotSignal,
+			   dynamicgraph::Signal<dynamicgraph::Vector,int> * corrSignal,
+			   dynamicgraph::Signal<dynamicgraph::Matrix,int> * contactPointsSignal );
 	  void addContactFromTask( const std::string & taskName, const std::string & contactName );
 	  void removeContact( const std::string & name );
 	  void dispContacts( std::ostream& os ) const;

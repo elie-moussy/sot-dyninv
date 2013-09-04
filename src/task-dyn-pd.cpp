@@ -45,16 +45,16 @@ namespace dynamicgraph
 
 
 	,CONSTRUCT_SIGNAL_IN(Kv,double)
-	,CONSTRUCT_SIGNAL_IN(qdot,ml::Vector)
+	,CONSTRUCT_SIGNAL_IN(qdot,dynamicgraph::Vector)
 	,CONSTRUCT_SIGNAL_IN(dt,double)
 
-	,CONSTRUCT_SIGNAL_OUT(errorDot,ml::Vector,
+	,CONSTRUCT_SIGNAL_OUT(errorDot,dynamicgraph::Vector,
 			      qdotSIN<<jacobianSOUT )
 	,CONSTRUCT_SIGNAL_OUT(KvAuto,double,
 			      controlGainSIN)
-	,CONSTRUCT_SIGNAL_OUT(Jdot,ml::Matrix,
+	,CONSTRUCT_SIGNAL_OUT(Jdot,dynamicgraph::Matrix,
 			      jacobianSOUT)
-	,CONSTRUCT_SIGNAL_OUT(taskVector,ml::Vector,
+	,CONSTRUCT_SIGNAL_OUT(taskVector,dynamicgraph::Vector,
 			      taskSOUT)
 
 	,previousJ(0u,0u),previousJset(false)
@@ -79,15 +79,15 @@ namespace dynamicgraph
       /* --- SIGNALS ---------------------------------------------------------- */
       /* --- SIGNALS ---------------------------------------------------------- */
 
-      ml::Vector& TaskDynPD::
-      errorDotSOUT_function( ml::Vector& errorDot,int time )
+      dynamicgraph::Vector& TaskDynPD::
+      errorDotSOUT_function( dynamicgraph::Vector& errorDot,int time )
       {
 	sotDEBUGIN(15);
 
-	const ml::Vector & qdot = qdotSIN(time);
-	const ml::Matrix & J = jacobianSOUT(time);
-	errorDot.resize( J.nbRows() );
-	J.multiply(qdot,errorDot);
+	const dynamicgraph::Vector & qdot = qdotSIN(time);
+	const dynamicgraph::Matrix & J = jacobianSOUT(time);
+	errorDot.resize( J.rows() );
+	errorDot = J*qdot;
 
 	sotDEBUGOUT(15);
 	return errorDot;
@@ -111,9 +111,9 @@ namespace dynamicgraph
       {
 	sotDEBUGIN(15);
 
-	const ml::Vector & e = errorSOUT(time);
-	const ml::Vector & edot_measured = errorDotSOUT(time);
-	const ml::Vector & edot_ref = errorTimeDerivativeSOUT(time);
+	const dynamicgraph::Vector & e = errorSOUT(time);
+	const dynamicgraph::Vector & edot_measured = errorDotSOUT(time);
+	const dynamicgraph::Vector & edot_ref = errorTimeDerivativeSOUT(time);
 	const double& Kp = controlGainSIN(time);
 	const double& Kv = KvSIN(time);
 
@@ -126,26 +126,26 @@ namespace dynamicgraph
 	return task;
       }
 
-      ml::Matrix& TaskDynPD::
-      JdotSOUT_function( ml::Matrix& Jdot,int time )
+      dynamicgraph::Matrix& TaskDynPD::
+      JdotSOUT_function( dynamicgraph::Matrix& Jdot,int time )
       {
 	sotDEBUGIN(15);
 
-	const ml::Matrix& currentJ = jacobianSOUT(time);
+	const dynamicgraph::Matrix& currentJ = jacobianSOUT(time);
 	const double& dt = dtSIN(time);
 
-	if( previousJ.nbRows()!=currentJ.nbRows() ) previousJset = false;
+	if( previousJ.rows()!=currentJ.rows() ) previousJset = false;
 
 	if( previousJset )
 	  {
-	    assert( currentJ.nbRows()==previousJ.nbRows()
-		    && currentJ.nbCols()==previousJ.nbCols() );
+	    assert( currentJ.rows()==previousJ.rows()
+		    && currentJ.cols()==previousJ.cols() );
 
-	    Jdot .resize( currentJ.nbRows(),currentJ.nbCols() );
+	    Jdot .resize( currentJ.rows(),currentJ.cols() );
 	    Jdot = currentJ - previousJ;
 	    Jdot *= 1/dt;
 	  }
-	else { Jdot.resize(currentJ.nbRows(),currentJ.nbCols() ); Jdot.fill(0); }
+	else { Jdot.resize(currentJ.rows(),currentJ.cols() ); Jdot.fill(0); }
 
 	previousJ = currentJ;
 	previousJset = true;
@@ -157,8 +157,8 @@ namespace dynamicgraph
       void TaskDynPD::resetJacobianDerivative( void ) { previousJset = false; }
 
 
-      ml::Vector& TaskDynPD::
-      taskVectorSOUT_function( ml::Vector& taskV, int time )
+      dynamicgraph::Vector& TaskDynPD::
+      taskVectorSOUT_function( dynamicgraph::Vector& taskV, int time )
       {
 	const dg::sot::VectorMultiBound & task = taskSOUT(time);
 	taskV.resize(task.size());

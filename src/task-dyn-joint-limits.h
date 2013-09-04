@@ -71,18 +71,18 @@ namespace dynamicgraph {
 
 	public:  /* --- SIGNALS --- */
 
-	  DECLARE_SIGNAL_IN(position,ml::Vector);
-	  DECLARE_SIGNAL_IN(velocity,ml::Vector);
-	  DECLARE_SIGNAL_IN(referenceInf,ml::Vector);
-	  DECLARE_SIGNAL_IN(referenceSup,ml::Vector);
+	  DECLARE_SIGNAL_IN(position,dynamicgraph::Vector);
+	  DECLARE_SIGNAL_IN(velocity,dynamicgraph::Vector);
+	  DECLARE_SIGNAL_IN(referenceInf,dynamicgraph::Vector);
+	  DECLARE_SIGNAL_IN(referenceSup,dynamicgraph::Vector);
 	  //DECLARE_SIGNAL_IN(dt,double);
 
-	  DECLARE_SIGNAL_OUT(normalizedPosition,ml::Vector);
+	  DECLARE_SIGNAL_OUT(normalizedPosition,dynamicgraph::Vector);
 
 	public:  /* --- COMPUTATION --- */
 	  dg::sot::VectorMultiBound& computeTaskDynJointLimits( dg::sot::VectorMultiBound& res,int time );
-	  ml::Matrix& computeTjlJacobian( ml::Matrix& J,int time );
-	  ml::Matrix& computeTjlJdot( ml::Matrix& Jdot,int time );
+	  dynamicgraph::Matrix& computeTjlJacobian( dynamicgraph::Matrix& J,int time );
+	  dynamicgraph::Matrix& computeTjlJdot( dynamicgraph::Matrix& Jdot,int time );
 
 	  //protected:
 	  //dynamicgraph::sot::VectorMultiBound&
@@ -90,7 +90,7 @@ namespace dynamicgraph {
 	  //std::list< sotFeatureAbstract* > featureList;
 
 	protected:
-	  ml::Matrix previousJ;
+	  dynamicgraph::Matrix previousJ;
 	  bool previousJset;
 
 	private:   /* --- DISPLAY --- */

@@ -75,12 +75,12 @@ namespace dynamicgraph {
 	  virtual const std::string& getClassName( void ) const { return CLASS_NAME; }
 
 	  /* --- SIGNALS --- */
-	  DECLARE_SIGNAL_IN(velocityDes, ml::Vector);
+	  DECLARE_SIGNAL_IN(velocityDes, dynamicgraph::Vector);
 	  DECLARE_SIGNAL_IN(duration, double);
 	  DECLARE_SIGNAL_IN(initialTime, double);
 
-	  DECLARE_SIGNAL_OUT(velocityCurrent, ml::Vector);
-	  DECLARE_SIGNAL_OUT(velocityDesired, ml::Vector);
+	  DECLARE_SIGNAL_OUT(velocityCurrent, dynamicgraph::Vector);
+	  DECLARE_SIGNAL_OUT(velocityDesired, dynamicgraph::Vector);
 
 
 	protected:
@@ -88,7 +88,7 @@ namespace dynamicgraph {
 	  dg::sot::VectorMultiBound& computeTaskSOUT( dg::sot::VectorMultiBound& task, int iter );
 
 	private:
-	  ml::Vector previousTask;
+	  dynamicgraph::Vector previousTask;
 
 	}; // class  TaskDynPassingPoint
 

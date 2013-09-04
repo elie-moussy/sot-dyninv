@@ -40,9 +40,9 @@ namespace dynamicgraph
       ZmpEstimator::
       ZmpEstimator( const std::string & name )
 	: Entity(name)
-	,CONSTRUCT_SIGNAL_IN(fn,ml::Vector)
-	,CONSTRUCT_SIGNAL_IN(support,ml::Matrix)
-	,CONSTRUCT_SIGNAL_OUT(zmp,ml::Vector, fnSIN << supportSIN)
+	,CONSTRUCT_SIGNAL_IN(fn,dynamicgraph::Vector)
+	,CONSTRUCT_SIGNAL_IN(support,dynamicgraph::Matrix)
+	,CONSTRUCT_SIGNAL_OUT(zmp,dynamicgraph::Vector, fnSIN << supportSIN)
       {
 	signalRegistration( fnSIN << supportSIN << zmpSOUT );
       }
@@ -51,13 +51,13 @@ namespace dynamicgraph
       /* --- SIGNALS ---------------------------------------------------------- */
       /* --- SIGNALS ---------------------------------------------------------- */
 
-      ml::Vector& ZmpEstimator::
-      zmpSOUT_function( ml::Vector &zmp, int iter )
+      dynamicgraph::Vector& ZmpEstimator::
+      zmpSOUT_function( dynamicgraph::Vector &zmp, int iter )
       {
 	sotDEBUG(15) << " # In time = " << iter << std::endl;
 
-	const ml::Vector& mlfn = fnSIN(iter);
-	const ml::Matrix& support = supportSIN(iter);
+	const dynamicgraph::Vector& mlfn = fnSIN(iter);
+	const dynamicgraph::Matrix& support = supportSIN(iter);
 	zmp.resize(2);;
 	double numx=0., numy=0.;
 	double Sfn=0.;

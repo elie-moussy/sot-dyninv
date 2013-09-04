@@ -49,11 +49,11 @@ namespace dynamicgraph
       DynamicIntegrator( const std::string & name )
 	: Entity(name)
 
-	,CONSTRUCT_SIGNAL_IN(acceleration,ml::Vector)
+	,CONSTRUCT_SIGNAL_IN(acceleration,dg::Vector)
 	,CONSTRUCT_SIGNAL_IN(dt,double)
 
-	,CONSTRUCT_SIGNAL_OUT(velocity,ml::Vector,sotNOSIGNAL)
-	,CONSTRUCT_SIGNAL_OUT(position,ml::Vector,sotNOSIGNAL)
+	,CONSTRUCT_SIGNAL_OUT(velocity,dg::Vector,sotNOSIGNAL)
+	,CONSTRUCT_SIGNAL_OUT(position,dg::Vector,sotNOSIGNAL)
       {
 	Entity::signalRegistration( accelerationSIN << dtSIN
 				    << velocitySOUT << positionSOUT );
@@ -75,15 +75,15 @@ namespace dynamicgraph
       /* --- SIGNALS ---------------------------------------------------------- */
       /* --- SIGNALS ---------------------------------------------------------- */
 
-      ml::Vector& DynamicIntegrator::
-      velocitySOUT_function( ml::Vector& mlv,int )
+      dg::Vector& DynamicIntegrator::
+      velocitySOUT_function( dg::Vector& mlv,int )
       {
 	mlv = velocity;
 	return mlv;
       }
 
-      ml::Vector& DynamicIntegrator::
-      positionSOUT_function( ml::Vector& mlp,int )
+      dg::Vector& DynamicIntegrator::
+      positionSOUT_function( dg::Vector& mlp,int )
       {
 	mlp = position;
 	return mlp;
@@ -93,7 +93,7 @@ namespace dynamicgraph
       void DynamicIntegrator::
       integrateFromSignals( const int & time )
       {
-	const ml::Vector & acc = accelerationSIN(time);
+	const dg::Vector & acc = accelerationSIN(time);
 	const double & dt = dtSIN(time);
 
 	integrate( acc,dt, velocity,position );
@@ -108,21 +108,21 @@ namespace dynamicgraph
       }
 
       void DynamicIntegrator::
-      setPosition( const ml::Vector& p )
+      setPosition( const dg::Vector& p )
       {
 	position = p;
 	positionSOUT.setReady();
       }
 
       void DynamicIntegrator::
-      setVelocity( const ml::Vector& v )
+      setVelocity( const dg::Vector& v )
       {
 	velocity = v;
 	velocitySOUT.setReady();
       }
 
       void DynamicIntegrator::
-      setState( const ml::Vector& p,const ml::Vector& v )
+      setState( const dg::Vector& p,const dg::Vector& v )
       {
 	sotDEBUG(5) << "State: " << p << v << std::endl;
 	position = p;
@@ -304,10 +304,10 @@ namespace dynamicgraph
 
       /* -------------------------------------------------------------------------- */
       void DynamicIntegrator::
-      integrate( const ml::Vector& mlacceleration,
+      integrate( const dg::Vector& mlacceleration,
 		 const double & dt,
-		 ml::Vector & mlvelocity,
-		 ml::Vector & mlposition )
+		 dg::Vector & mlvelocity,
+		 dg::Vector & mlposition )
       {
 	using namespace DynamicIntegratorStatic;
 	using soth::MATLAB;

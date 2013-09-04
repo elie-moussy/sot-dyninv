@@ -38,6 +38,7 @@
 /* SOT */
 #include <sot-dyninv/signal-helper.h>
 #include <sot-dyninv/entity-helper.h>
+#include <dynamic-graph/linear-algebra.h>
 
 namespace dynamicgraph {
   namespace sot {
@@ -68,9 +69,9 @@ namespace dynamicgraph {
 
 	public:  /* --- SIGNALS --- */
 
-	  DECLARE_SIGNAL_IN(fn,ml::Vector);
-	  DECLARE_SIGNAL_IN(support,ml::Matrix);
-	  DECLARE_SIGNAL_OUT(zmp,ml::Vector);
+	  DECLARE_SIGNAL_IN(fn,dynamicgraph::Vector);
+	  DECLARE_SIGNAL_IN(support,dynamicgraph::Matrix);
+	  DECLARE_SIGNAL_OUT(zmp,dynamicgraph::Vector);
 
 	}; // class ZmpEstimator
 

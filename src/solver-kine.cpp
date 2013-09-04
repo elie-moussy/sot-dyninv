@@ -113,8 +113,8 @@ namespace dynamicgraph
 	,stack_t()
 
 	,CONSTRUCT_SIGNAL_IN(damping,double)
-	,CONSTRUCT_SIGNAL_IN(velocity,ml::Vector)
-	,CONSTRUCT_SIGNAL_OUT(control,ml::Vector,
+	,CONSTRUCT_SIGNAL_IN(velocity,dynamicgraph::Vector)
+	,CONSTRUCT_SIGNAL_OUT(control,dynamicgraph::Vector,
 			      dampingSIN )
 
 	,controlFreeFloating(true)
@@ -305,8 +305,8 @@ namespace dynamicgraph
 #define COLS_TAU leftCols( nbDofs+ntau ).rightCols( ntau )
 #define COLS_F rightCols( nfs )
 
-      ml::Vector& SolverKine::
-      controlSOUT_function( ml::Vector &mlcontrol, int t )
+      dynamicgraph::Vector& SolverKine::
+      controlSOUT_function( dynamicgraph::Vector &mlcontrol, int t )
       {
 	sotDEBUG(15) << " # In time = " << t << std::endl;
 

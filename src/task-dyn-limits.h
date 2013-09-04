@@ -66,24 +66,24 @@ namespace dynamicgraph {
 
 	public:  /* --- SIGNALS --- */
 
-	  DECLARE_SIGNAL_IN(position,ml::Vector);
-	  DECLARE_SIGNAL_IN(velocity,ml::Vector);
+	  DECLARE_SIGNAL_IN(position,dynamicgraph::Vector);
+	  DECLARE_SIGNAL_IN(velocity,dynamicgraph::Vector);
 
-	  DECLARE_SIGNAL_IN(referencePosInf,ml::Vector);
-	  DECLARE_SIGNAL_IN(referencePosSup,ml::Vector);
-	  DECLARE_SIGNAL_IN(referenceVelInf,ml::Vector);
-	  DECLARE_SIGNAL_IN(referenceVelSup,ml::Vector);
+	  DECLARE_SIGNAL_IN(referencePosInf,dynamicgraph::Vector);
+	  DECLARE_SIGNAL_IN(referencePosSup,dynamicgraph::Vector);
+	  DECLARE_SIGNAL_IN(referenceVelInf,dynamicgraph::Vector);
+	  DECLARE_SIGNAL_IN(referenceVelSup,dynamicgraph::Vector);
 
-	  DECLARE_SIGNAL_OUT(normalizedVelocity,ml::Vector);
-	  DECLARE_SIGNAL_OUT(normalizedPosition,ml::Vector);
+	  DECLARE_SIGNAL_OUT(normalizedVelocity,dynamicgraph::Vector);
+	  DECLARE_SIGNAL_OUT(normalizedPosition,dynamicgraph::Vector);
 
 	public:  /* --- COMPUTATION --- */
 	  dg::sot::VectorMultiBound& computeTaskDynLimits( dg::sot::VectorMultiBound& res,int time );
-	  ml::Matrix& computeTjlJacobian( ml::Matrix& J,int time );
-	  ml::Matrix& computeTjlJdot( ml::Matrix& Jdot,int time );
+	  dynamicgraph::Matrix& computeTjlJacobian( dynamicgraph::Matrix& J,int time );
+	  dynamicgraph::Matrix& computeTjlJdot( dynamicgraph::Matrix& Jdot,int time );
 
 	protected:
-	  ml::Matrix previousJ;
+	  dynamicgraph::Matrix previousJ;
 	  bool previousJset;
 
 	private:   /* --- DISPLAY --- */

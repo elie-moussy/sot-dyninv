@@ -30,29 +30,29 @@ namespace Eigen
 }
 
 #define EIGEN_CONST_MATRIX_FROM_SIGNAL(name,signal)	                 \
-  Eigen::const_SigMatrixXd name						\
+  Eigen::const_SigMatrixXd name						 \
   (							                 \
-   signal.accessToMotherLib().data().begin(),                      	 \
-   signal.nbRows(),				               	         \
-   signal.nbCols()				               	         \
+   signal.data(),                      	 				 \
+   signal.rows(),				               	         \
+   signal.cols()				               	         \
 						               	         )
 #define EIGEN_MATRIX_FROM_SIGNAL(name,signal)	                         \
   Eigen::SigMatrixXd name			                         \
   (							                 \
-   signal.accessToMotherLib().data().begin(),	                         \
-   signal.nbRows(),				               	         \
-   signal.nbCols()				               	         \
+   signal.data(),	                         			 \
+   signal.rows(),				               	         \
+   signal.cols()				               	         \
 						               	         )
 #define EIGEN_CONST_VECTOR_FROM_SIGNAL(name,signal)	                 \
   Eigen::const_SigVectorXd name		               	                 \
   (						               	         \
-   signal.accessToMotherLib().data().begin(),	               	         \
+   signal.data(),	               	         			 \
    signal.size()				               	         \
 						               	         )
 #define EIGEN_VECTOR_FROM_SIGNAL(name,signal)	                         \
   Eigen::SigVectorXd name	 	               	                 \
   (						               	         \
-   signal.accessToMotherLib().data().begin(),	               	         \
+   signal.data(),	               	         			 \
    signal.size()				               	         \
 						               	         )
 

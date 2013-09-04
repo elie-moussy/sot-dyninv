@@ -38,6 +38,7 @@
 /* SOT */
 #include <sot-dyninv/signal-helper.h>
 #include <sot-dyninv/entity-helper.h>
+#include <dynamic-graph/linear-algebra.h>
 
 
 namespace dynamicgraph {
@@ -69,24 +70,24 @@ namespace dynamicgraph {
 
 	public:  /* --- SIGNALS --- */
 
-	  DECLARE_SIGNAL_IN( acceleration,ml::Vector );
+	  DECLARE_SIGNAL_IN( acceleration,dynamicgraph::Vector );
 	  DECLARE_SIGNAL_IN( dt,double );
 
-	  DECLARE_SIGNAL_OUT( velocity,ml::Vector );
-	  DECLARE_SIGNAL_OUT( position,ml::Vector );
+	  DECLARE_SIGNAL_OUT( velocity,dynamicgraph::Vector );
+	  DECLARE_SIGNAL_OUT( position,dynamicgraph::Vector );
 
 	public: /* --- MODIFIORS --- */
-	  void integrate( const ml::Vector& acceleration, const double& dt,
-			  ml::Vector & velocity, ml::Vector & position );
+	  void integrate( const dynamicgraph::Vector& acceleration, const double& dt,
+			  dynamicgraph::Vector & velocity, dynamicgraph::Vector & position );
 	  void integrateFromSignals( const int & time );
 	  void integrateFromSignals( void );
 
-	  void setPosition( const ml::Vector& p );
-	  void setVelocity( const ml::Vector& v );
-	  void setState( const ml::Vector& p,const ml::Vector& v );
+	  void setPosition( const dynamicgraph::Vector& p );
+	  void setVelocity( const dynamicgraph::Vector& v );
+	  void setState( const dynamicgraph::Vector& p,const dynamicgraph::Vector& v );
 
 	protected:
-	  ml::Vector position,velocity;
+	  dynamicgraph::Vector position,velocity;
 
 	}; // class DynamicIntegrator
 
