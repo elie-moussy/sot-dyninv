@@ -54,8 +54,9 @@ namespace dynamicgraph
 			      qdotSIN<<jacobianSOUT )
 	,CONSTRUCT_SIGNAL_OUT(velocityDesired, dynamicgraph::Vector,
 			      velocityDesSIN<<controlSelectionSIN )
-	,previousTask((int)0)
+	,previousTask()
       {
+        previousTask.resize(0);
 	taskSOUT.setFunction( boost::bind(&TaskDynPassingPoint::computeTaskSOUT,this,_1,_2) );
 	taskSOUT.addDependency( velocityCurrentSOUT );
 	taskSOUT.addDependency( durationSIN );
